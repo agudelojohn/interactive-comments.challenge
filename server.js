@@ -27,5 +27,5 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${port}`);
   });
 
-  global.io = io; // Hacer io global para usar en API routes
+  global.io = io;
 });

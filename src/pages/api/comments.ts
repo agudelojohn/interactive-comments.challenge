@@ -1,8 +1,10 @@
-//@ts-nocheck
-// Agregar al inicio del archivo
+//@ts-ignore
 const io = global.io;
 import type { NextApiRequest, NextApiResponse } from "next";
+import path from "path";
 import { Server } from "socket.io";
+
+var fs = require("fs");
 
 interface IBaseComment {
   id: number;
@@ -26,30 +28,48 @@ interface IReply extends IBaseComment {
   replyingTo: string;
 }
 
-let fileData:{items:any[]} = { items: [] };
+interface IData {
+  currentUser: { image?: { png?: string; webp?: string }; username: string };
+  comments: IComment[];
+}
+
+const filePath = path.join(process.cwd(), "data.json");
+const fileData: IData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+function getLastId(comments: Array<IComment | IBaseComment>) {
+  let lastId = 0;
+  comments.forEach((comment) => {
+    lastId = Math.max(lastId, comment.id);
+    if ("replies" in comment && comment.replies.length > 0) {
+      lastId = Math.max(lastId, getLastId(comment.replies));
+    }
+  });
+  return lastId;
+}
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
   if (req.method === "POST") {
-    const { item } = req.body;
+    const { comment } = req.body;
 
-    // const filePath = path.join(process.cwd(), "public", "data.json");
-    // const fileData = JSON.parse(fs.readFileSync(filePath, "utf8"));
-    fileData.items.push(item);
+    if (fileData) {
+      const { comments } = fileData;
+      const lastId = getLastId(comments);
+      comments.push({ id: lastId + 1, ...comment });
+      fs.writeFileSync(filePath, JSON.stringify(fileData));
 
-    // fs.writeFileSync(filePath, JSON.stringify(fileData));
+      const io = (global as any).io as Server;
+      io.emit("itemAdded", comment);
 
-    const io = (global as any).io as Server;
-    io.emit("itemAdded", item); // Emitir el evento de nuevo item
-
-    return res.status(200).json({ message: "Item added successfully" });
+      return res.status(200).json({ message: "Comment added successfully" });
+    }
+    return (res.status(505).end().statusMessage = "Error getting data");
   } else {
     // Manejar otros métodos HTTP o devolver un error
     return res.status(405).end();
   }
-
 
   //   const comment: IComment = {
   //     id: 1,
