@@ -13,6 +13,8 @@ var fs = require("fs");
 
 const filePath = path.join(process.cwd(), "data.json");
 const fileData: IData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+const INITIAL_INDEX = 1;
+let lastIndex = INITIAL_INDEX;
 
 function getLastId(comments: Array<IComment | IBaseComment>) {
   let lastId = 0;
@@ -25,10 +27,24 @@ function getLastId(comments: Array<IComment | IBaseComment>) {
   return lastId;
 }
 
+function mockAddingComments() {
+  const { comments } = fileData;
+  if (lastIndex !== comments.length - 1) {
+    lastIndex += 1;
+    const newComment = comments[lastIndex];
+    const io = (global as any).io as Server;
+    io.emit("itemAdded", newComment);
+    setTimeout(() => {
+      mockAddingComments();
+    }, 2000);
+  }
+}
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
+  mockAddingComments();
   if (req.method === "POST") {
     const { comment } = req.body;
     if (fileData) {
@@ -43,9 +59,12 @@ export default function handler(
     }
     return (res.status(505).end().statusMessage = "Error getting data");
   } else if (req.method === "GET") {
-    if (fileData) {      
+    if (fileData) {
       const { comments } = fileData;
-      return res.status(200).json(comments)
+      return res
+        .status(200)
+        .json(comments.filter((comment, i) => i <= INITIAL_INDEX));
+      // return res.status(200).json(comments)
     }
     return (res.status(505).end().statusMessage = "Error getting data");
   } else {
