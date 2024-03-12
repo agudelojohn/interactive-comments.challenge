@@ -3,35 +3,13 @@ const io = global.io;
 import type { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 import { Server } from "socket.io";
+import {
+  IBaseComment,
+  IComment,
+  IData,
+} from "../../../utils/interfaces/comments";
 
 var fs = require("fs");
-
-interface IBaseComment {
-  id: number;
-  content: string;
-  createdAt: string;
-  score: number;
-  user: {
-    image: {
-      png: string;
-      webp: string;
-    };
-    username: string;
-  };
-}
-
-interface IComment extends IBaseComment {
-  replies: IBaseComment[];
-}
-
-interface IReply extends IBaseComment {
-  replyingTo: string;
-}
-
-interface IData {
-  currentUser: { image?: { png?: string; webp?: string }; username: string };
-  comments: IComment[];
-}
 
 const filePath = path.join(process.cwd(), "data.json");
 const fileData: IData = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -53,38 +31,24 @@ export default function handler(
 ) {
   if (req.method === "POST") {
     const { comment } = req.body;
-
     if (fileData) {
       const { comments } = fileData;
       const lastId = getLastId(comments);
-      comments.push({ id: lastId + 1, ...comment });
+      const newComment = { id: lastId + 1, ...comment };
+      comments.push(newComment);
       fs.writeFileSync(filePath, JSON.stringify(fileData));
-
       const io = (global as any).io as Server;
-      io.emit("itemAdded", comment);
-
+      io.emit("itemAdded", newComment);
       return res.status(200).json({ message: "Comment added successfully" });
     }
     return (res.status(505).end().statusMessage = "Error getting data");
+  } else if (req.method === "GET") {
+    if (fileData) {      
+      const { comments } = fileData;
+      return res.status(200).json(comments)
+    }
+    return (res.status(505).end().statusMessage = "Error getting data");
   } else {
-    // Manejar otros métodos HTTP o devolver un error
     return res.status(405).end();
   }
-
-  //   const comment: IComment = {
-  //     id: 1,
-  //     content:
-  //       "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
-  //     createdAt: "1 month ago",
-  //     score: 12,
-  //     user: {
-  //       image: {
-  //         png: "./images/avatars/image-amyrobson.png",
-  //         webp: "./images/avatars/image-amyrobson.webp",
-  //       },
-  //       username: "amyrobson",
-  //     },
-  //     replies: [],
-  //   };
-  //   res.status(200).json([comment]);
 }
