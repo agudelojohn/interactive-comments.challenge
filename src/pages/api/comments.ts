@@ -13,7 +13,7 @@ var fs = require("fs");
 
 const filePath = path.join(process.cwd(), "data.json");
 const fileData: IData = JSON.parse(fs.readFileSync(filePath, "utf8"));
-const INITIAL_INDEX = 1;
+const INITIAL_INDEX = 0;
 let lastIndex = INITIAL_INDEX;
 
 function getLastId(comments: Array<IComment | IBaseComment>) {
@@ -36,7 +36,7 @@ function mockAddingComments() {
     io.emit("itemAdded", newComment);
     setTimeout(() => {
       mockAddingComments();
-    }, 2000);
+    }, 5000);
   }
 }
 
@@ -44,7 +44,6 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  mockAddingComments();
   if (req.method === "POST") {
     const { comment } = req.body;
     if (fileData) {
@@ -59,6 +58,7 @@ export default function handler(
     }
     return (res.status(505).end().statusMessage = "Error getting data");
   } else if (req.method === "GET") {
+    mockAddingComments();
     if (fileData) {
       const { comments } = fileData;
       return res
