@@ -1,29 +1,14 @@
 import InfoBar from "./InfoBar";
 import LikeButton from "./LikeButton";
+import { ICommentCard } from "./interfaces";
 
-type IUserData = {
-  userName: string;
-  dateOfComment: Date;
-  image?:string;
-};
-
-interface IReplyCard {
-  userData: IUserData;
-  likes: number;
-  comment: string;
-}
-
-export type ICommentCard = {
-  userData: IUserData;
-  comment: string;
-  likes: number;
-};
-
-interface IProps {
+export interface IProps {
   data: ICommentCard;
 }
 
-const CommentCard: React.FC<IProps> = ({ data: { userData, comment, likes } }) => {
+const CommentCard: React.FC<IProps> = ({
+  data: { userData, comment, likes },
+}) => {
   return (
     <div className="w-full bg-white rounded-lg p-5 flex flex-row gap-5">
       {/* 1. Buttons */}
