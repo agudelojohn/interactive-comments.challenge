@@ -93,18 +93,18 @@
       "replies": []
     },
     {
-        "id": 7,
-        "content": "Wow, this is amazing",
-        "createdAt": "28 month ago",
-        "score": 18,
-        "user": {
-          "image": {
-            "png": "./images/avatars/image-amyrobson.png",
-            "webp": "./images/avatars/image-amyrobson.webp"
-          },
-          "username": "johnagudelo"
+      "id": 7,
+      "content": "Wow, this is amazing",
+      "createdAt": "28 month ago",
+      "score": 18,
+      "user": {
+        "image": {
+          "png": "./images/avatars/image-amyrobson.png",
+          "webp": "./images/avatars/image-amyrobson.webp"
         },
-        "replies": []
-      }
+        "username": "johnagudelo"
+      },
+      "replies": []
+    }
   ]
 }
