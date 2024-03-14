@@ -1,3 +1,5 @@
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "tailwind.config";
 import Image from "next/image";
 import ReplyButton from "./ReplyButton";
 
@@ -8,6 +10,9 @@ interface IInfoBar {
 }
 
 const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
+  const fullConfig = resolveConfig(tailwindConfig);
+  let screenWidth = fullConfig.theme.screens.md;
+
   function getTimeDifference() {
     const today = new Date();
     const timeDiferenceInMili = today.getTime() - dateOfComment.getTime();
@@ -25,7 +30,8 @@ const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
         const differenceInDays = Math.floor(timeDiferenceInHours / 24);
         timeDiference = `${differenceInDays} days ago`;
         break;
-      case timeDiferenceInHours > hoursInAMont && timeDiferenceInHours < hoursInAYear:
+      case timeDiferenceInHours > hoursInAMont &&
+        timeDiferenceInHours < hoursInAYear:
         const differenceInMonts = Math.floor(timeDiferenceInHours / 24 / 30);
         timeDiference = `${differenceInMonts} monts ago`;
         break;
@@ -39,7 +45,7 @@ const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
     return timeDiference;
   }
   return (
-    <div className="w-full flex flex-row gap-5 items-center bg-blue-400">
+    <div className="w-full flex flex-row gap-5 items-center">
       {/* Image */}
       <Image
         src={imgSrc ?? "/user.png"}
@@ -53,7 +59,7 @@ const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
       {/* date */}
       <small className="text-grayishBlue">{getTimeDifference()}</small>
       {/* Reply Button ? */}
-      <ReplyButton className="ml-auto" />
+      <ReplyButton className="ml-auto hidden md:flex" type="primary" />
     </div>
   );
 };
