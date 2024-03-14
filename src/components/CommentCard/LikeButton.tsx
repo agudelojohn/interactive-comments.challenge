@@ -1,12 +1,12 @@
 import { Icon } from "@iconify/react";
 import React from "react";
 
-interface IScrollButton {
+interface ILikeButton {
   onPlusClick: () => void;
   onMinusClick: () => void;
 }
 
-const ScrollButton: React.FC<IScrollButton> = ({
+const LikeButton: React.FC<ILikeButton> = ({
   onPlusClick,
   onMinusClick,
 }) => {
@@ -28,4 +28,4 @@ const ScrollButton: React.FC<IScrollButton> = ({
     </div>
   );
 };
-export default ScrollButton;
+export default LikeButton;
