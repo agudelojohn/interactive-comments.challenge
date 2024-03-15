@@ -1,13 +1,14 @@
 "use-client";
 import { ICommentData, IReplyCard } from "@/components/CommentCard/interfaces";
 import CommentGroup from "@/components/CommentGroup/CommentGroup";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
-import { IBaseComment, IComment } from "../../utils/interfaces/comments";
+import { IComment } from "../../utils/interfaces/comments";
 let socket: ReturnType<typeof io>;
 
 export default function Home() {
   const [comments, setComments] = useState<ICommentData[]>([]);
+  const endOfList = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch("/api/comments")
@@ -33,6 +34,14 @@ export default function Home() {
       console.log("Removed -> Socket Off");
     };
   }, []);
+
+  useEffect(() => {
+    if (endOfList.current) desplazarAlFinal();
+  }, [comments.length]);
+
+  const desplazarAlFinal = () => {
+    endOfList.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   function parseComment(rawComment: IComment) {
     let comment: ICommentData = {
@@ -71,6 +80,7 @@ export default function Home() {
             })}
         </div>
       </div>
+      <div ref={endOfList} />
     </>
   );
 }
