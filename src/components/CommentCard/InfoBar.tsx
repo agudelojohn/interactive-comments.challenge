@@ -52,7 +52,7 @@ const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
         alt="user image"
         width={32}
         height={32}
-        className="rounded-full bg-red-500"
+        className="rounded-full"
       />
       {/* name */}
       <small className="text-darkBlue text-base font-bold">{userName}</small>

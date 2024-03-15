@@ -4,6 +4,7 @@ import CommentGroup from "@/components/CommentGroup/CommentGroup";
 import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { IComment } from "../../utils/interfaces/comments";
+import UserComment from "@/components/UserComment/UserComment";
 let socket: ReturnType<typeof io>;
 
 export default function Home() {
@@ -36,10 +37,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (endOfList.current) desplazarAlFinal();
+    if (endOfList.current) scrollToBottom();
   }, [comments.length]);
 
-  const desplazarAlFinal = () => {
+  const scrollToBottom = () => {
     endOfList.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -80,6 +81,7 @@ export default function Home() {
             })}
         </div>
       </div>
+      <UserComment />
       <div ref={endOfList} />
     </>
   );
