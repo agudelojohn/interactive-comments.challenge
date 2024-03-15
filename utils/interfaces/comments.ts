@@ -20,7 +20,12 @@ export interface IReply extends IBaseComment {
   replyingTo: string;
 }
 
-export interface IData {
-  currentUser: { image?: { png?: string; webp?: string }; username: string };
+export interface IUserData {
+  image?: { png?: string; webp?: string };
+  username: string;
+}
+
+export interface IResponseData {
+  currentUser: IUserData;
   comments: IComment[];
 }

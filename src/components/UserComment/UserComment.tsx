@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { RefObject } from "react";
-interface IProps {
-  ref?: RefObject<HTMLInputElement>;
-}
-const UserComment: React.FC<IProps> = () => {
+import { IUserData } from "../CommentCard/interfaces";
+// interface IProps {
+//   userData: IUserData
+// }
+// const UserComment: React.FC<IProps> = (userData) => {
+
+const UserComment: React.FC = () => {
   const imgSrc = null;
   return (
     <div className="bg-white w-full rounded-lg p-5">

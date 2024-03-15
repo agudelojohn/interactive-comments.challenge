@@ -2,14 +2,21 @@ import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config";
 import Image from "next/image";
 import ReplyButton from "./ReplyButton";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface IInfoBar {
   imgSrc?: string;
   userName: string;
   dateOfComment: Date;
+  isOwnComment: boolean;
 }
 
-const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
+const InfoBar: React.FC<IInfoBar> = ({
+  imgSrc,
+  userName,
+  dateOfComment,
+  isOwnComment,
+}) => {
   const fullConfig = resolveConfig(tailwindConfig);
   let screenWidth = fullConfig.theme.screens.md;
 
@@ -59,7 +66,24 @@ const InfoBar: React.FC<IInfoBar> = ({ imgSrc, userName, dateOfComment }) => {
       {/* date */}
       <small className="text-grayishBlue">{getTimeDifference()}</small>
       {/* Reply Button ? */}
-      <ReplyButton className="ml-auto hidden md:flex" type="primary" />
+      {isOwnComment && (
+        <div className="ml-auto hidden md:flex gap-5">
+          <p className="text-softRed flex flex-row gap-1 items-start font-bold">
+            <Icon icon="mdi:delete" width="20" height="20" />
+            Delete
+          </p>
+          <p className="text-moderateBlue flex flex-row gap-1 items-start font-bold">
+            <Icon icon="eva:edit-fill" width="20" height="20" />
+            Edit
+          </p>
+        </div>
+      )}
+      {!isOwnComment && (
+        <ReplyButton
+          className="ml-auto hidden md:flex items-start"
+          type="primary"
+        />
+      )}
     </div>
   );
 };

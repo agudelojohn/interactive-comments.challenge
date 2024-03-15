@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import InfoBar from "./InfoBar";
 import LikeButton from "./LikeButton";
 import { ICommentCard } from "./interfaces";
+import UserContext from "@/context/userContext";
 
 export interface IProps {
   data: ICommentCard;
@@ -9,6 +11,11 @@ export interface IProps {
 const CommentCard: React.FC<IProps> = ({
   data: { userData, comment, likes },
 }) => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
+  }
+  const { user } = context;
   return (
     <div className="w-full bg-white rounded-lg p-5 flex flex-row gap-6">
       {/* 1. Buttons */}
@@ -24,6 +31,7 @@ const CommentCard: React.FC<IProps> = ({
             userName={userData.userName}
             dateOfComment={userData.dateOfComment}
             imgSrc={userData.image}
+            isOwnComment={user?.username === userData.userName}
           />
         </div>
         <div className="text-grayishBlue text-base leading-6">{comment}</div>

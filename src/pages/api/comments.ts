@@ -6,13 +6,13 @@ import { Server } from "socket.io";
 import {
   IBaseComment,
   IComment,
-  IData,
+  IResponseData,
 } from "../../../utils/interfaces/comments";
 
 var fs = require("fs");
 
 const filePath = path.join(process.cwd(), "data.json");
-const fileData: IData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+const fileData: IResponseData = JSON.parse(fs.readFileSync(filePath, "utf8"));
 const INITIAL_INDEX = 1;
 let lastIndex = INITIAL_INDEX;
 
@@ -61,9 +61,11 @@ export default function handler(
     mockAddingComments();
     if (fileData) {
       const { comments } = fileData;
+      const innitialComments = comments.filter((comment, i) => i <= INITIAL_INDEX)
+      const data = {...fileData, comments:innitialComments}
       return res
         .status(200)
-        .json(comments.filter((comment, i) => i <= INITIAL_INDEX));
+        .json(data);
       // return res.status(200).json(comments)
     }
     return (res.status(505).end().statusMessage = "Error getting data");
