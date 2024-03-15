@@ -15,3 +15,8 @@ export type ICommentCard = {
   comment: string;
   likes: number;
 };
+
+export type ICommentData = {
+  main: ICommentCard;
+  replies: IReplyCard[];
+}
