@@ -18,6 +18,7 @@ const config: Config = {
       moderateBlue: "#5357B6",
       darkBlue: "#334253",
       grayishBlue:"#67727E",
+      lightGray: "#E9EBF0"
     },
   },
   plugins: [],
