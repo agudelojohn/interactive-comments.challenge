@@ -13,7 +13,7 @@ var fs = require("fs");
 
 const filePath = path.join(process.cwd(), "data.json");
 const fileData: IData = JSON.parse(fs.readFileSync(filePath, "utf8"));
-const INITIAL_INDEX = 0;
+const INITIAL_INDEX = 1;
 let lastIndex = INITIAL_INDEX;
 
 function getLastId(comments: Array<IComment | IBaseComment>) {
