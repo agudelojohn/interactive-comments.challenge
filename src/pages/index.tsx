@@ -27,7 +27,7 @@ export default function Home() {
           return parseComment(comment);
         });
         setComments(parcedComments);
-        setUser(currentUser)
+        setUser(currentUser);
       });
 
     if (!socket) {
@@ -61,17 +61,18 @@ export default function Home() {
         userData: {
           dateOfComment: new Date(rawComment.createdAt),
           userName: rawComment.user.username,
-          // image:
+          image: rawComment.user.image.png ?? rawComment.user.image.webp ?? "",
         },
       },
       replies: rawComment.replies.map((reply) => {
+        console.log(reply);
         const replyData: IReplyCard = {
           comment: reply.content,
           likes: reply.score,
           userData: {
             dateOfComment: new Date(reply.createdAt),
             userName: reply.user.username,
-            // image
+            image: reply.user.image.png ?? reply.user.image.webp ?? "",
           },
         };
         return replyData;

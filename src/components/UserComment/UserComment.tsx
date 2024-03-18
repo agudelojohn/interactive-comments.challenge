@@ -1,17 +1,18 @@
+import UserContext from "@/context/userContext";
 import Image from "next/image";
-import { IUserData } from "../CommentCard/interfaces";
-// interface IProps {
-//   userData: IUserData
-// }
-// const UserComment: React.FC<IProps> = (userData) => {
+import { useContext } from "react";
 
 const UserComment: React.FC = () => {
-  const imgSrc = null;
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
+  }
+  const { user } = context;
   return (
     <div className="bg-white w-full rounded-lg p-5">
       <div className="grid grid-cols-12">
         <Image
-          src={imgSrc ?? "/user.png"}
+          src={user?.image?.png ?? user?.image?.webp ?? "/user.png"}
           alt="user image"
           width={40}
           height={40}

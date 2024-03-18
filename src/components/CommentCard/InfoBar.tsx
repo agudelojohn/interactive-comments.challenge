@@ -49,6 +49,8 @@ const InfoBar: React.FC<IInfoBar> = ({
         timeDiference = `${differenceInYears} years ago`;
       //   break;
     }
+    console.log('timeDiference',timeDiference)
+    console.log('timeDiference dateOfComment',dateOfComment)
     return timeDiference;
   }
   return (
