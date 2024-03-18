@@ -1,8 +1,11 @@
 import UserContext from "@/context/userContext";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ReplyButton from "./ReplyButton";
+import { BlockingView } from "../BlockingView/BlockingView";
+import CommonContext from "@/context/commonContext";
+import { DeleteConfirmation } from "./DeleteConfirmation";
 
 interface IInfoBar {
   imgSrc?: string;
@@ -21,12 +24,23 @@ const InfoBar: React.FC<IInfoBar> = ({
   commentId,
   handleOnEdit,
 }) => {
-  // const [isEditting, setIsEditting] = useState(false);
-  const context = useContext(UserContext);
-  if (!context) {
+  const userContext = useContext(UserContext);
+  const commonContext = useContext(CommonContext);
+
+  if (!userContext || !commonContext) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { setOnEdit, onEdit } = context;
+  const { onEdit } = userContext;
+  const { setFocusView } = commonContext;
+
+  function handleOnDelete() {
+    setFocusView(
+      <DeleteConfirmation
+        onDelete={() => console.log("delete")}
+        onCancel={() => setFocusView(undefined)}
+      />
+    );
+  }
 
   function getTimeDifference() {
     const today = new Date();
@@ -78,7 +92,10 @@ const InfoBar: React.FC<IInfoBar> = ({
         <div className="ml-auto hidden md:flex gap-5 pr-2">
           {!onEdit.isEditing && (
             <>
-              <p className="text-softRed flex flex-row gap-1 items-start font-bold">
+              <p
+                onClick={handleOnDelete}
+                className="text-softRed flex flex-row gap-1 items-start font-bold cursor-pointer"
+              >
                 <Icon icon="mdi:delete" width="20" height="20" />
                 Delete
               </p>

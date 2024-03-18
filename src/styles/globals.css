@@ -1,17 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 body {
   font-family: "Rubik", sans-serif !important;
-  @apply bg-veryLightGray;
+  @apply bg-veryLightGray m-0 h-screen p-0;
 }
 
 @layer components {
   .btn {
-    @apply flex gap-2 items-center p-2 rounded-lg justify-center;
+    @apply flex gap-2 items-center p-2 rounded-lg justify-center cursor-pointer;
   }
   .btn-primary {
     @apply bg-white text-moderateBlue text-base;
