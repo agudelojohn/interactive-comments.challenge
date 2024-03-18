@@ -9,20 +9,20 @@ export interface IProps {
 }
 
 const CommentCard: React.FC<IProps> = ({
-  data: { id, userData, comment, likes },
+  data: { id, userData, comment, likes, replyingTo },
 }) => {
   const context = useContext(UserContext);
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { user, onEdit, setOnEdit } = context;
+  const { user, setOnEdit } = context;
 
-  function handleOnEdit(){
+  function handleOnEdit() {
     setOnEdit({
       id,
       isEditing: true,
-      editText:comment
-    })
+      editText: comment,
+    });
   }
   return (
     <div className="w-full bg-white rounded-lg p-5 flex flex-row gap-6">
@@ -44,7 +44,10 @@ const CommentCard: React.FC<IProps> = ({
             handleOnEdit={handleOnEdit}
           />
         </div>
-        <div className="text-grayishBlue text-base leading-6">{comment}</div>
+        <div className="text-grayishBlue text-base leading-6">
+          {replyingTo && <span className="text-moderateBlue font-bold mr-1 cursor-pointer">{`@${replyingTo}`}</span>}
+          {comment}
+        </div>
       </div>
     </div>
   );

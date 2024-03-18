@@ -14,7 +14,7 @@ export interface IBaseComment {
 
 export interface IComment extends IBaseComment {
   id: number;
-  replies: IBaseComment[];
+  replies: IReply[];
 }
 
 export interface IReply extends IBaseComment {

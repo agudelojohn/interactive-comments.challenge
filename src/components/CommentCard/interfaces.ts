@@ -16,6 +16,7 @@ export type ICommentCard = {
   userData: IUserData;
   comment: string;
   likes: number;
+  replyingTo?: string;
 };
 
 export type ICommentData = {

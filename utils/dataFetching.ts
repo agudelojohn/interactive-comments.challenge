@@ -46,6 +46,7 @@ export function parseComment(rawComment: IComment) {
           userName: reply.user.username,
           image: reply.user.image.png ?? reply.user.image.webp ?? "",
         },
+        replyingTo:reply.replyingTo
       };
       return replyData;
     }),
