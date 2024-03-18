@@ -3,6 +3,8 @@ import tailwindConfig from "tailwind.config";
 import Image from "next/image";
 import ReplyButton from "./ReplyButton";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useContext } from "react";
+import UserContext from "@/context/userContext";
 
 interface IInfoBar {
   imgSrc?: string;
@@ -17,9 +19,12 @@ const InfoBar: React.FC<IInfoBar> = ({
   dateOfComment,
   isOwnComment,
 }) => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
+  }
+  const { setOnEdit, onEdit } = context;
   const fullConfig = resolveConfig(tailwindConfig);
-  let screenWidth = fullConfig.theme.screens.md;
-
   function getTimeDifference() {
     const today = new Date();
     const timeDiferenceInMili = today.getTime() - dateOfComment.getTime();
@@ -49,8 +54,6 @@ const InfoBar: React.FC<IInfoBar> = ({
         timeDiference = `${differenceInYears} years ago`;
       //   break;
     }
-    console.log('timeDiference',timeDiference)
-    console.log('timeDiference dateOfComment',dateOfComment)
     return timeDiference;
   }
   return (
@@ -69,15 +72,31 @@ const InfoBar: React.FC<IInfoBar> = ({
       <small className="text-grayishBlue">{getTimeDifference()}</small>
       {/* Reply Button ? */}
       {isOwnComment && (
-        <div className="ml-auto hidden md:flex gap-5">
-          <p className="text-softRed flex flex-row gap-1 items-start font-bold">
-            <Icon icon="mdi:delete" width="20" height="20" />
-            Delete
-          </p>
-          <p className="text-moderateBlue flex flex-row gap-1 items-start font-bold">
-            <Icon icon="eva:edit-fill" width="20" height="20" />
-            Edit
-          </p>
+        <div className="ml-auto hidden md:flex gap-5 pr-2">
+          {!onEdit && (
+            <>
+              <p className="text-softRed flex flex-row gap-1 items-start font-bold">
+                <Icon icon="mdi:delete" width="20" height="20" />
+                Delete
+              </p>
+              <p
+                className="text-moderateBlue flex flex-row gap-1 items-start font-bold cursor-pointer"
+                onClick={() => setOnEdit(true)}
+              >
+                <Icon icon="eva:edit-fill" width="20" height="20" />
+                Edit
+              </p>
+            </>
+          )}
+          {onEdit && (
+            <p
+              className="text-moderateBlue flex flex-row gap-1 items-start font-bold animate-pulse"
+              onClick={() => setOnEdit(true)}
+            >
+              <Icon icon="eva:edit-fill" width="20" height="20" className="animate-pulse" />
+              Editing...
+            </p>
+          )}
         </div>
       )}
       {!isOwnComment && (

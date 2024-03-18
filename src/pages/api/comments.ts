@@ -19,7 +19,7 @@ let lastIndex = INITIAL_INDEX;
 function getLastId(comments: Array<IComment | IBaseComment>) {
   let lastId = 0;
   comments.forEach((comment) => {
-    lastId = Math.max(lastId, comment.id);
+    if ("id" in comment) lastId = Math.max(lastId, comment.id);
     if ("replies" in comment && comment.replies.length > 0) {
       lastId = Math.max(lastId, getLastId(comment.replies));
     }
@@ -45,11 +45,13 @@ export default function handler(
   res: NextApiResponse<any>
 ) {
   if (req.method === "POST") {
-    const { comment } = req.body;
+    const { comment } = JSON.parse(req.body);
+    console.log("POST", comment);
     if (fileData) {
       const { comments } = fileData;
       const lastId = getLastId(comments);
-      const newComment = { id: lastId + 1, ...comment };
+      const newComment = { id: lastId + 1, ...comment, replies: [] };
+      console.log("POST", newComment);
       comments.push(newComment);
       fs.writeFileSync(filePath, JSON.stringify(fileData));
       const io = (global as any).io as Server;
@@ -61,11 +63,11 @@ export default function handler(
     mockAddingComments();
     if (fileData) {
       const { comments } = fileData;
-      const innitialComments = comments.filter((comment, i) => i <= INITIAL_INDEX)
-      const data = {...fileData, comments:innitialComments}
-      return res
-        .status(200)
-        .json(data);
+      const innitialComments = comments.filter(
+        (comment, i) => i <= INITIAL_INDEX
+      );
+      const data = { ...fileData, comments: innitialComments };
+      return res.status(200).json(data);
       // return res.status(200).json(comments)
     }
     return (res.status(505).end().statusMessage = "Error getting data");

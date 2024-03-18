@@ -1,5 +1,4 @@
 export interface IBaseComment {
-  id: number;
   content: string;
   createdAt: string;
   score: number;
@@ -13,10 +12,12 @@ export interface IBaseComment {
 }
 
 export interface IComment extends IBaseComment {
+  id: number;
   replies: IBaseComment[];
 }
 
 export interface IReply extends IBaseComment {
+  id: number;
   replyingTo: string;
 }
 
@@ -28,4 +29,9 @@ export interface IUserData {
 export interface IResponseData {
   currentUser: IUserData;
   comments: IComment[];
+}
+
+export interface INewComment {
+  comment: IBaseComment;
+  replies?: IBaseComment[];
 }

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import InfoBar from "./InfoBar";
 import LikeButton from "./LikeButton";
 import { ICommentCard } from "./interfaces";
@@ -15,7 +15,11 @@ const CommentCard: React.FC<IProps> = ({
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { user } = context;
+  const { user, onEdit, setEditText } = context;
+  useEffect(() => {
+    if (onEdit) setEditText(comment);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onEdit]);
   return (
     <div className="w-full bg-white rounded-lg p-5 flex flex-row gap-6">
       {/* 1. Buttons */}

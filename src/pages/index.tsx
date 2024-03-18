@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import { IComment, IResponseData } from "../../utils/interfaces/comments";
 import UserComment from "@/components/UserComment/UserComment";
 import UserContext from "@/context/userContext";
+import { getData, parseComment } from "utils/dataFetching";
 let socket: ReturnType<typeof io>;
 
 export default function Home() {
@@ -19,17 +20,15 @@ export default function Home() {
   const { setUser } = context;
 
   useEffect(() => {
-    fetch("/api/comments")
-      .then((res) => res.json())
-      .then((data: IResponseData) => {
-        const { currentUser, comments } = data;
-        const parcedComments = comments.map((comment) => {
-          return parseComment(comment);
-        });
-        setComments(parcedComments);
-        setUser(currentUser);
-      });
+    async function fetchData() {
+      const { currentUser, parcedComments } = await getData();
+      setComments(parcedComments);
+      setUser(currentUser);
+    }
+    fetchData();
+  }, []);
 
+  useEffect(() => {
     if (!socket) {
       socket = io();
       console.log("Socket On");
@@ -38,7 +37,6 @@ export default function Home() {
         console.log("itemAdded", item);
       });
     }
-
     return () => {
       socket.off("itemAdded");
       console.log("Removed -> Socket Off");
@@ -52,34 +50,6 @@ export default function Home() {
   const scrollToBottom = () => {
     endOfList.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  function parseComment(rawComment: IComment) {
-    let comment: ICommentData = {
-      main: {
-        comment: rawComment.content,
-        likes: rawComment.score,
-        userData: {
-          dateOfComment: new Date(rawComment.createdAt),
-          userName: rawComment.user.username,
-          image: rawComment.user.image.png ?? rawComment.user.image.webp ?? "",
-        },
-      },
-      replies: rawComment.replies.map((reply) => {
-        console.log(reply);
-        const replyData: IReplyCard = {
-          comment: reply.content,
-          likes: reply.score,
-          userData: {
-            dateOfComment: new Date(reply.createdAt),
-            userName: reply.user.username,
-            image: reply.user.image.png ?? reply.user.image.webp ?? "",
-          },
-        };
-        return replyData;
-      }),
-    };
-    return comment;
-  }
 
   return (
     <>
