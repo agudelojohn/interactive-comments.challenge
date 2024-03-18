@@ -1,4 +1,5 @@
 export interface IBaseComment {
+  id: number;
   content: string;
   createdAt: string;
   score: number;
@@ -32,6 +33,17 @@ export interface IResponseData {
 }
 
 export interface INewComment {
-  comment: IBaseComment;
+  comment: {
+    content: string;
+    createdAt: string;
+    score: number;
+    user: {
+      image: {
+        png: string;
+        webp: string;
+      };
+      username: string;
+    };
+  };
   replies?: IBaseComment[];
 }

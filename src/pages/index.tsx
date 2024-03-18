@@ -1,17 +1,17 @@
 "use-client";
-import { ICommentData, IReplyCard } from "@/components/CommentCard/interfaces";
+import { ICommentData } from "@/components/CommentCard/interfaces";
 import CommentGroup from "@/components/CommentGroup/CommentGroup";
-import { useContext, useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
-import { IComment, IResponseData } from "../../utils/interfaces/comments";
 import UserComment from "@/components/UserComment/UserComment";
 import UserContext from "@/context/userContext";
+import { useContext, useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
 import { getData, parseComment } from "utils/dataFetching";
 let socket: ReturnType<typeof io>;
 
 export default function Home() {
   const [comments, setComments] = useState<ICommentData[]>([]);
   const endOfList = useRef<HTMLInputElement>(null);
+
 
   const context = useContext(UserContext);
   if (!context) {

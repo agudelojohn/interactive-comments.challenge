@@ -1,25 +1,29 @@
-import { useContext, useEffect } from "react";
+import UserContext from "@/context/userContext";
+import { useContext } from "react";
 import InfoBar from "./InfoBar";
 import LikeButton from "./LikeButton";
 import { ICommentCard } from "./interfaces";
-import UserContext from "@/context/userContext";
 
 export interface IProps {
   data: ICommentCard;
 }
 
 const CommentCard: React.FC<IProps> = ({
-  data: { userData, comment, likes },
+  data: { id, userData, comment, likes },
 }) => {
   const context = useContext(UserContext);
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { user, onEdit, setEditText } = context;
-  useEffect(() => {
-    if (onEdit) setEditText(comment);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onEdit]);
+  const { user, onEdit, setOnEdit } = context;
+
+  function handleOnEdit(){
+    setOnEdit({
+      id,
+      isEditing: true,
+      editText:comment
+    })
+  }
   return (
     <div className="w-full bg-white rounded-lg p-5 flex flex-row gap-6">
       {/* 1. Buttons */}
@@ -36,6 +40,8 @@ const CommentCard: React.FC<IProps> = ({
             dateOfComment={userData.dateOfComment}
             imgSrc={userData.image}
             isOwnComment={user?.username === userData.userName}
+            commentId={id}
+            handleOnEdit={handleOnEdit}
           />
         </div>
         <div className="text-grayishBlue text-base leading-6">{comment}</div>

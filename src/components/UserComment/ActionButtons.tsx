@@ -6,24 +6,33 @@ const ActionButtons: React.FC = () => {
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { onEdit, setOnEdit, setEditText } = context;
+  const { onEdit, setOnEdit } = context;
   function handleCancel() {
-    setEditText("");
-    setOnEdit(false);
+    setOnEdit({
+      id: 0,
+      editText: "",
+      isEditing: false,
+    });
   }
   return (
     <>
-      {!onEdit && (
-        <button className="btn btn-secondary col-span-2 font-bold h-12 w-[104px] m-auto" type="submit">
+      {!onEdit.isEditing && (
+        <button
+          className="btn btn-secondary col-span-2 font-bold h-12 w-[104px] m-auto"
+          type="submit"
+        >
           SEND
         </button>
       )}
-      {onEdit && (
+      {onEdit.isEditing && (
         <div className="col-span-2 row-span-2">
           <button className="btn btn-secondary font-bold h-12 w-[104px] mb-2 m-auto">
             DONE
           </button>
-          <button className="btn btn-secondary  font-bold h-12 w-[104px] m-auto bg-softRed" onClick={handleCancel}>
+          <button
+            className="btn btn-secondary  font-bold h-12 w-[104px] m-auto bg-softRed"
+            onClick={handleCancel}
+          >
             CANCEL
           </button>
         </div>

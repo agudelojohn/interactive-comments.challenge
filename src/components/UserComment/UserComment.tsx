@@ -1,9 +1,9 @@
 import UserContext from "@/context/userContext";
 import Image from "next/image";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import ActionButtons from "./ActionButtons";
-import { IBaseComment, INewComment } from "utils/interfaces/comments";
 import { sendData } from "utils/dataFetching";
+import { INewComment } from "utils/interfaces/comments";
+import ActionButtons from "./ActionButtons";
 
 const UserComment: React.FC = () => {
   const [value, setValue] = useState("");
@@ -11,7 +11,7 @@ const UserComment: React.FC = () => {
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { user, editText } = context;
+  const { user, onEdit: { editText }, } = context;
   useEffect(() => {
     setValue(editText);
   }, [editText]);

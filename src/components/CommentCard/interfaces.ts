@@ -5,12 +5,14 @@ export type IUserData = {
 };
 
 export interface IReplyCard {
+  id:number,
   userData: IUserData;
   likes: number;
   comment: string;
 }
 
 export type ICommentCard = {
+  id:number,
   userData: IUserData;
   comment: string;
   likes: number;

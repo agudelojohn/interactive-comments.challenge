@@ -6,10 +6,19 @@ import { IUserData } from "utils/interfaces/comments";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<IUserData>();
-  const [onEdit, setOnEdit] = useState<boolean>(false)
-  const [editText, setEditText] = useState('')
+  const [onEdit, setOnEdit] = useState<{
+    id: number;
+    isEditing: boolean;
+    editText: string;
+  }>({
+    id: 0,
+    isEditing: false,
+    editText: "",
+  });
   return (
-    <UserContext.Provider value={{ user, setUser, onEdit, setOnEdit, editText, setEditText }}>
+    <UserContext.Provider
+      value={{ user, setUser, onEdit, setOnEdit }}
+    >
       <Component {...pageProps} />
     </UserContext.Provider>
   );

@@ -26,6 +26,7 @@ export async function sendData(newComment: INewComment) {
 export function parseComment(rawComment: IComment) {
   let comment: ICommentData = {
     main: {
+      id: rawComment.id,
       comment: rawComment.content,
       likes: rawComment.score,
       userData: {
@@ -37,6 +38,7 @@ export function parseComment(rawComment: IComment) {
     replies: rawComment.replies.map((reply) => {
       console.log(reply);
       const replyData: IReplyCard = {
+        id:reply.id,
         comment: reply.content,
         likes: reply.score,
         userData: {
