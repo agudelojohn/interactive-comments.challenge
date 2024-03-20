@@ -6,6 +6,7 @@ import ReplyButton from "./ReplyButton";
 import { BlockingView } from "../BlockingView/BlockingView";
 import CommonContext from "@/context/commonContext";
 import { DeleteConfirmation } from "./DeleteConfirmation";
+import { getTimeDifference } from "utils/timeHandling";
 
 interface IInfoBar {
   imgSrc?: string;
@@ -42,37 +43,6 @@ const InfoBar: React.FC<IInfoBar> = ({
     );
   }
 
-  function getTimeDifference() {
-    const today = new Date();
-    const timeDiferenceInMili = today.getTime() - dateOfComment.getTime();
-    const timeDiferenceInHours = Math.floor(
-      timeDiferenceInMili / 1000 / 60 / 60
-    );
-    const hoursInAMont = 731;
-    const hoursInAYear = 8760;
-    let timeDiference = "";
-    switch (true) {
-      case timeDiferenceInHours < 24:
-        timeDiference = `${timeDiferenceInHours} hours ago`;
-        break;
-      case timeDiferenceInHours >= 24 && timeDiferenceInHours <= hoursInAMont:
-        const differenceInDays = Math.floor(timeDiferenceInHours / 24);
-        timeDiference = `${differenceInDays} days ago`;
-        break;
-      case timeDiferenceInHours > hoursInAMont &&
-        timeDiferenceInHours < hoursInAYear:
-        const differenceInMonts = Math.floor(timeDiferenceInHours / 24 / 30);
-        timeDiference = `${differenceInMonts} monts ago`;
-        break;
-      case timeDiferenceInHours >= hoursInAYear:
-        const differenceInYears = Math.floor(
-          timeDiferenceInHours / 24 / 30 / 12
-        );
-        timeDiference = `${differenceInYears} years ago`;
-      //   break;
-    }
-    return timeDiference;
-  }
   return (
     <div className="w-full flex flex-row gap-5 items-center">
       {/* Image */}
@@ -86,7 +56,9 @@ const InfoBar: React.FC<IInfoBar> = ({
       {/* name */}
       <small className="text-darkBlue text-base font-bold">{userName}</small>
       {/* date */}
-      <small className="text-grayishBlue">{getTimeDifference()}</small>
+      <small className="text-grayishBlue">
+        {getTimeDifference(dateOfComment)}
+      </small>
       {/* Reply Button ? */}
       {isOwnComment && (
         <div className="ml-auto hidden md:flex gap-5 pr-2">
