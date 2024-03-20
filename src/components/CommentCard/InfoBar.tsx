@@ -125,6 +125,7 @@ const InfoBar: React.FC<IInfoBar> = ({
         <ReplyButton
           className="ml-auto hidden md:flex items-start"
           type="primary"
+          commentUserName={userName}
         />
       )}
     </div>

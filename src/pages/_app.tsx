@@ -18,10 +18,13 @@ export default function App({ Component, pageProps }: AppProps) {
     isEditing: false,
     editText: "",
   });
-  const [focusView, setFocusView] = useState<JSX.Element|undefined>(undefined);
+  const [onReply, setOnReply] = useState<string>('');
+  const [focusView, setFocusView] = useState<JSX.Element | undefined>(
+    undefined
+  );
   return (
     <CommonContext.Provider value={{ focusView, setFocusView }}>
-      <UserContext.Provider value={{ user, setUser, onEdit, setOnEdit }}>
+      <UserContext.Provider value={{ user, setUser, onEdit, setOnEdit, onReply, setOnReply }}>
         {focusView !== undefined && <BlockingView />}
         <Component {...pageProps} />
       </UserContext.Provider>

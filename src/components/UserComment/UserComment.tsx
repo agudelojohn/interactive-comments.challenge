@@ -11,10 +11,34 @@ const UserComment: React.FC = () => {
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { user, onEdit: { editText }, } = context;
+  const {
+    user,
+    onEdit: { editText },
+    onReply,
+    setOnReply,
+  } = context;
   useEffect(() => {
     setValue(editText);
   }, [editText]);
+
+  useEffect(() => {
+    if (onReply != "") {
+      const toReply = `@${onReply}`;
+      setValue((prev) => {
+        if (prev) {
+          if (prev.startsWith("@")) {
+            const oldText = prev.split(" ");
+            oldText[0] = toReply;
+            return oldText.join(" ");
+          }
+          return toReply?.concat(` ${prev}`);
+        }
+        return toReply;
+      });
+      setOnReply("");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onReply]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -36,7 +60,7 @@ const UserComment: React.FC = () => {
       };
       try {
         await sendData(newComment);
-        setValue('')
+        setValue("");
       } catch (e) {
         console.error(e);
       }

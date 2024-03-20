@@ -5,14 +5,15 @@ export type IUserData = {
 };
 
 export interface IReplyCard {
-  id:number,
+  id: number;
   userData: IUserData;
   likes: number;
   comment: string;
+  replyingTo: string;
 }
 
 export type ICommentCard = {
-  id:number,
+  id: number;
   userData: IUserData;
   comment: string;
   likes: number;
@@ -22,4 +23,4 @@ export type ICommentCard = {
 export type ICommentData = {
   main: ICommentCard;
   replies: IReplyCard[];
-}
+};
