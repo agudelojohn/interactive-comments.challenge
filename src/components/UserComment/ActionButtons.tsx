@@ -18,24 +18,24 @@ const ActionButtons: React.FC = () => {
     <>
       {!onEdit.isEditing && (
         <button
-          className="btn btn-secondary col-span-2 font-bold h-12 w-[104px] m-auto"
+          className="btn btn-secondary font-bold h-12 w-[104px] "
           type="submit"
         >
           SEND
         </button>
       )}
       {onEdit.isEditing && (
-        <div className="col-span-2 row-span-2">
-          <button className="btn btn-secondary font-bold h-12 w-[104px] mb-2 m-auto">
+        <>
+          <button className="btn btn-secondary font-bold h-12 w-[104px] mb-2 inline-block md:block mr-2 md:mr-0">
             DONE
           </button>
           <button
-            className="btn btn-secondary  font-bold h-12 w-[104px] m-auto bg-softRed"
+            className="btn btn-secondary font-bold h-12 w-[104px] bg-softRed inline-block"
             onClick={handleCancel}
           >
             CANCEL
           </button>
-        </div>
+        </>
       )}
     </>
   );

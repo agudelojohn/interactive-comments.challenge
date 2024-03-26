@@ -37,7 +37,7 @@ const UserComment: React.FC = () => {
       });
       setOnReply("");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onReply]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -75,15 +75,17 @@ const UserComment: React.FC = () => {
           alt="user image"
           width={40}
           height={40}
-          className="rounded-full col-span-1 m-auto"
+          className="rounded-full col-span-2 md:col-span-1 m-auto order-2 md:order-1"
         />
         <textarea
-          className="col-span-9 row-span-2 min-h-24 p-2 border-[1px] border-lightGray"
+          className="rounded-lg col-span-12 md:col-span-9 row-span-2 min-h-24 p-2 border-[1px] border-lightGray order-1 md:order-2 mb-5 md:mb-0"
           placeholder="Add a comment..."
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <ActionButtons />
+        <div className="order-3 col-span-10 md:col-span-2 ml-auto md:m-auto">
+          <ActionButtons />
+        </div>
       </form>
     </div>
   );

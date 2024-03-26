@@ -50,6 +50,7 @@ export default function Home() {
   const scrollToBottom = () => {
     endOfList.current?.scrollIntoView({ behavior: "smooth" });
   };
+  
   return (
     <>
       <div className="flex justify-center py-8 px-8 w-full">
@@ -60,7 +61,7 @@ export default function Home() {
             })}
         </div>
       </div>
-      <UserComment />
+      <div  className="px-4 md:px-0 pb-3"><UserComment /></div>      
       <div ref={endOfList} />
     </>
   );
