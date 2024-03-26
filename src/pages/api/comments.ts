@@ -50,12 +50,17 @@ export default function handler(
     if (fileData) {
       const { comments } = fileData;
       const lastId = getLastId(comments);
-      const newComment = { id: lastId + 1, ...comment, replies: [] };
-      console.log("POST", newComment);
-      comments.push(newComment);
+      if ("replyingTo" in comment) {
+        const newComment = { id: lastId + 1, ...comment };
+        const replyingComment = comments.find
+      } else {
+        const newComment = { id: lastId + 1, ...comment, replies: [] };
+        console.log("POST", newComment);
+        comments.push(newComment);
+        const io = (global as any).io as Server;
+        io.emit("itemAdded", newComment);
+      }
       fs.writeFileSync(filePath, JSON.stringify(fileData));
-      const io = (global as any).io as Server;
-      io.emit("itemAdded", newComment);
       return res.status(200).json({ message: "Comment added successfully" });
     }
     return (res.status(505).end().statusMessage = "Error getting data");

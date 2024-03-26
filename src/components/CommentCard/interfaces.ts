@@ -24,3 +24,11 @@ export type ICommentData = {
   main: ICommentCard;
   replies: IReplyCard[];
 };
+
+// export type INewCommentData = {
+//   main: ICommentCard;
+//   replyData?: {
+//     replyingToName: string;
+//     replyingToID: number;
+//   };
+// };
