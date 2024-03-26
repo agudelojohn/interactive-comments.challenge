@@ -13,7 +13,7 @@ const LikeButton: React.FC<ILikeButton> = ({
   likes
 }) => {
   return (
-    <div className="flex flex-col rounded-[10px] bg-veryLightGray p-2 gap-2 text-center max-h-[100px]">
+    <div className="flex md:flex-col rounded-[10px] bg-veryLightGray p-2 gap-2 text-center max-h-[100px]">
       <div
         className="p-1 cursor-pointer text-lightGrayishBlue hover:text-moderateBlue"
         onClick={onPlusClick}

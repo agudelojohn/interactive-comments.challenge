@@ -1,8 +1,10 @@
 import UserContext from "@/context/userContext";
 import { useContext } from "react";
+import { CommentActions } from "./CommentActions";
 import InfoBar from "./InfoBar";
 import LikeButton from "./LikeButton";
 import { ICommentCard } from "./interfaces";
+import ReplyButton from "./ReplyButton";
 
 export interface IProps {
   data: ICommentCard;
@@ -16,6 +18,7 @@ const CommentCard: React.FC<IProps> = ({
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
   const { user, setOnEdit } = context;
+  const isOwnComment = user?.username === userData.userName;
 
   function handleOnEdit() {
     setOnEdit({
@@ -25,13 +28,23 @@ const CommentCard: React.FC<IProps> = ({
     });
   }
   return (
-    <div className="w-full bg-white rounded-lg p-5 flex flex-row gap-6">
+    <div className="w-full bg-white rounded-lg p-5 flex flex-col-reverse md:flex-row gap-6">
       {/* 1. Buttons */}
-      <LikeButton
-        onPlusClick={() => console.log("plusClick")}
-        onMinusClick={() => console.log("minusClick")}
-        likes={likes}
-      />
+      <div className="flex md:block">
+        <LikeButton
+          onPlusClick={() => console.log("plusClick")}
+          onMinusClick={() => console.log("minusClick")}
+          likes={likes}
+        />
+        <div className="md:hidden m-auto mr-0">
+          {isOwnComment && (
+            <CommentActions commentId={id} handleOnEdit={handleOnEdit} />
+          )}
+          {!isOwnComment && user && (
+            <ReplyButton type="primary" commentUserName={user.username} />
+          )}
+        </div>
+      </div>
       {/* 2. Data relevant */}
       <div className="w-full flex flex-col gap-4 mb-2">
         <div>
@@ -39,13 +52,15 @@ const CommentCard: React.FC<IProps> = ({
             userName={userData.userName}
             dateOfComment={userData.dateOfComment}
             imgSrc={userData.image}
-            isOwnComment={user?.username === userData.userName}
+            isOwnComment={isOwnComment}
             commentId={id}
             handleOnEdit={handleOnEdit}
           />
         </div>
         <div className="text-grayishBlue text-base leading-6">
-          {replyingTo && <span className="text-moderateBlue font-bold mr-1 cursor-pointer">{`@${replyingTo}`}</span>}
+          {replyingTo && (
+            <span className="text-moderateBlue font-bold mr-1 cursor-pointer">{`@${replyingTo}`}</span>
+          )}
           {comment}
         </div>
       </div>

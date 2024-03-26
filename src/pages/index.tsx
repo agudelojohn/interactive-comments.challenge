@@ -17,7 +17,7 @@ export default function Home() {
   if (!context) {
     throw new Error("MiComponente debe estar dentro del ThemeContext.Provider");
   }
-  const { setUser } = context;
+  const { setUser, onEdit } = context;
 
   useEffect(() => {
     async function fetchData() {
@@ -45,16 +45,15 @@ export default function Home() {
 
   useEffect(() => {
     if (endOfList.current) scrollToBottom();
-  }, [comments.length]);
+  }, [comments.length, onEdit]);
 
   const scrollToBottom = () => {
     endOfList.current?.scrollIntoView({ behavior: "smooth" });
   };
-
   return (
     <>
-      <div className="flex justify-center py-8">
-        <div className="w-[730px]">
+      <div className="flex justify-center py-8 px-8 w-full">
+        <div className="w-full md:w-[730px]">
           {comments &&
             comments.map((comment, i) => {
               return <CommentGroup key={i} data={comment} />;
